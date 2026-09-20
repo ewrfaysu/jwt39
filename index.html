@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+<title>Free Fire Token Generator</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  * { 
+    box-sizing: border-box; 
+    margin: 0; 
+    padding: 0; 
+    -webkit-tap-highlight-color: transparent; 
+  }
+  
+  html, body {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    touch-action: manipulation;
+  }
+
+  body {
+    font-family: 'Rajdhani', sans-serif;
+    background: #030712;
+    color: #e2e8f0;
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+  }
+
+  .card {
+    width: 100%;
+    max-width: 400px;
+    padding: 24px;
+    border-radius: 20px;
+    background: rgba(10, 16, 31, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(0, 217, 255, 0.3);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8),
+                0 0 25px rgba(0, 217, 255, 0.15);
+    text-align: center;
+    position: relative;
+  }
+
+  .title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(18px, 5vw, 22px);
+    font-weight: 800;
+    letter-spacing: 1px;
+    background: linear-gradient(135deg, #00d9ff, #0055ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+  }
+
+  .form-group {
+    text-align: left;
+    margin-bottom: 12px;
+  }
+
+  .form-group label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    color: #94a3b8;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .input-field {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px solid rgba(0, 217, 255, 0.25);
+    background: rgba(5, 9, 20, 0.7);
+    color: #fff;
+    font-size: 16px;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600;
+    outline: none;
+    transition: border-color 0.2s ease;
+  }
+
+  .input-field:focus {
+    border-color: #00d9ff;
+    background: rgba(5, 9, 20, 0.9);
+  }
+
+  .btn-submit {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    outline: none;
+    border-radius: 12px;
+    background: linear-gradient(90deg, #00d9ff, #0055ff);
+    color: #fff;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    cursor: pointer;
+    margin-top: 8px;
+    box-shadow: 0 4px 12px rgba(0, 85, 255, 0.3);
+    transition: transform 0.15s ease;
+  }
+
+  .btn-submit:active {
+    transform: scale(0.98);
+  }
+
+  .response-box {
+    margin-top: 15px;
+    padding: 12px;
+    border-radius: 12px;
+    background: rgba(5, 9, 20, 0.9);
+    border: 1px solid rgba(0, 217, 255, 0.3);
+    text-align: left;
+    cursor: pointer;
+    transition: border-color 0.2s ease, background 0.2s ease;
+  }
+
+  .response-box:hover {
+    border-color: #00d9ff;
+    background: rgba(8, 15, 32, 0.95);
+  }
+
+  .response-header-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+
+  .response-header {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    color: #00d9ff;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .copy-hint {
+    font-size: 11px;
+    color: #94a3b8;
+    font-weight: 600;
+  }
+
+  pre {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    border-radius: 8px;
+    color: #00ffaa;
+    font-family: 'Consolas', monospace;
+    font-size: 12px;
+    white-space: pre-wrap;
+    word-break: break-all;
+    max-height: 180px;
+    overflow-y: auto;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .toast {
+    position: absolute;
+    bottom: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #00d9ff;
+    color: #030712;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease, bottom 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 217, 255, 0.4);
+    z-index: 10;
+  }
+
+  .toast.show {
+    opacity: 1;
+    bottom: 12px;
+  }
+</style>
+</head>
+<body>
+
+<main class="card">
+  <h1 class="title">Token Generator</h1>
+
+  <div class="form-group">
+    <label for="uid">Account UID</label>
+    <input type="text" id="uid" class="input-field" placeholder="Ex: 18097039025" autocomplete="off">
+  </div>
+
+  <div class="form-group">
+    <label for="password">Account Password</label>
+    <input type="password" id="password" class="input-field" placeholder="Enter Password">
+  </div>
+
+  <button class="btn-submit" id="btnSubmit" onclick="generateToken()">🔑 GENERATE TOKEN</button>
+
+  <div class="response-box" onclick="copyTokenOnly()">
+    <div class="response-header-wrapper">
+      <span class="response-header">API Response:</span>
+      <span class="copy-hint">📋 Click to copy token</span>
+    </div>
+    <pre id="responseJson">Waiting for input...</pre>
+  </div>
+
+  <div id="toast" class="toast">Token Copied!</div>
+</main>
+
+<script>
+let lastApiResponse = null; // API ডাটা ধরে রাখার জন্য
+
+async function generateToken() {
+  const uid = document.getElementById('uid').value.trim();
+  const password = document.getElementById('password').value.trim();
+  const responseJson = document.getElementById('responseJson');
+  const btnSubmit = document.getElementById('btnSubmit');
+
+  if (!uid || !password) {
+    alert("অনুগ্রহ করে UID এবং Password উভয়ই প্রদান করুন!");
+    return;
+  }
+
+  btnSubmit.disabled = true;
+  btnSubmit.style.opacity = "0.7";
+  btnSubmit.textContent = "GENERATING...";
+  responseJson.textContent = "⏳ Processing Request...";
+
+  const url = `/token?uid=${encodeURIComponent(uid)}&password=${encodeURIComponent(password)}`;
+
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+    lastApiResponse = data; // ডাটা সেভ রাখা হচ্ছে
+    responseJson.textContent = JSON.stringify(data, null, 2);
+  } catch (error) {
+    lastApiResponse = null;
+    responseJson.textContent = JSON.stringify({
+      status: "error",
+      message: "API-এর সাথে সংযোগ করতে ব্যর্থ হয়েছে!",
+      details: error.message
+    }, null, 2);
+  } finally {
+    btnSubmit.disabled = false;
+    btnSubmit.style.opacity = "1";
+    btnSubmit.textContent = "🔑 GENERATE TOKEN";
+  }
+}
+
+function copyTokenOnly() {
+  if (!lastApiResponse) return;
+
+  // JSON অবজেক্টের ভেতর থেকে 'token' কি (Key) বের করা হচ্ছে
+  let token = lastApiResponse.token || lastApiResponse.access_token || lastApiResponse.jwt || null;
+
+  // যদি JSON-এ সরাসরি নাম না মেলে, তবে অবজেক্ট সার্চ করে বের করা
+  if (!token && typeof lastApiResponse === 'object') {
+    for (let key in lastApiResponse) {
+      if (key.toLowerCase().includes('token')) {
+        token = lastApiResponse[key];
+        break;
+      }
+    }
+  }
+
+  // যদি কোনো নির্দিষ্ট token কি না পাওয়া যায়, তবে পুরো টেক্সট কপি করবে
+  const textToCopy = token ? String(token) : document.getElementById('responseJson').textContent.trim();
+
+  if (textToCopy === "Waiting for input..." || textToCopy === "⏳ Processing Request...") {
+    return;
+  }
+
+  navigator.clipboard.writeText(textToCopy).then(() => {
+    showToast(token ? "Token Copied!" : "Copied to Clipboard!");
+  }).catch(() => {
+    const textarea = document.createElement('textarea');
+    textarea.value = textToCopy;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
+    showToast(token ? "Token Copied!" : "Copied to Clipboard!");
+  });
+}
+
+function showToast(message) {
+  const toast = document.getElementById('toast');
+  toast.textContent = message;
+  toast.classList.add('show');
+  setTimeout(() => {
+    toast.classList.remove('show');
+  }, 2000);
+}
+</script>
+
+</body>
+</html>
