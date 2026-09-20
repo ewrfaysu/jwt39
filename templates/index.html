@@ -55,8 +55,32 @@
     background: linear-gradient(135deg, #00d9ff, #0055ff);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    margin-bottom: 15px;
+    margin-bottom: 8px;
     text-transform: uppercase;
+  }
+
+  /* টেলিগ্রাম লিংক বাটন স্টাইল */
+  .telegram-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    color: #00d9ff;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 18px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    background: rgba(0, 217, 255, 0.1);
+    border: 1px solid rgba(0, 217, 255, 0.2);
+    transition: all 0.2s ease;
+  }
+
+  .telegram-btn:hover {
+    background: rgba(0, 217, 255, 0.25);
+    color: #fff;
+    box-shadow: 0 0 12px rgba(0, 217, 255, 0.4);
   }
 
   .form-group {
@@ -196,6 +220,11 @@
 <main class="card">
   <h1 class="title">Token Generator</h1>
 
+  <!-- টেলিগ্রাম লিংক এখানে যোগ করা হয়েছে -->
+  <a href="https://t.me/kodexofc" target="_blank" class="telegram-btn">
+    ✈ telegram: @kodexofc
+  </a>
+
   <div class="form-group">
     <label for="uid">Account UID</label>
     <input type="text" id="uid" class="input-field" placeholder="Ex: 18097039025" autocomplete="off">
@@ -220,7 +249,7 @@
 </main>
 
 <script>
-let lastApiResponse = null; // API ডাটা ধরে রাখার জন্য
+let lastApiResponse = null;
 
 async function generateToken() {
   const uid = document.getElementById('uid').value.trim();
@@ -243,7 +272,7 @@ async function generateToken() {
   try {
     const res = await fetch(url);
     const data = await res.json();
-    lastApiResponse = data; // ডাটা সেভ রাখা হচ্ছে
+    lastApiResponse = data;
     responseJson.textContent = JSON.stringify(data, null, 2);
   } catch (error) {
     lastApiResponse = null;
@@ -262,10 +291,8 @@ async function generateToken() {
 function copyTokenOnly() {
   if (!lastApiResponse) return;
 
-  // JSON অবজেক্টের ভেতর থেকে 'token' কি (Key) বের করা হচ্ছে
   let token = lastApiResponse.token || lastApiResponse.access_token || lastApiResponse.jwt || null;
 
-  // যদি JSON-এ সরাসরি নাম না মেলে, তবে অবজেক্ট সার্চ করে বের করা
   if (!token && typeof lastApiResponse === 'object') {
     for (let key in lastApiResponse) {
       if (key.toLowerCase().includes('token')) {
@@ -275,7 +302,6 @@ function copyTokenOnly() {
     }
   }
 
-  // যদি কোনো নির্দিষ্ট token কি না পাওয়া যায়, তবে পুরো টেক্সট কপি করবে
   const textToCopy = token ? String(token) : document.getElementById('responseJson').textContent.trim();
 
   if (textToCopy === "Waiting for input..." || textToCopy === "⏳ Processing Request...") {
