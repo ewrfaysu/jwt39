@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
-<title>Free Fire Token Generator - Fixed Circle Edition</title>
+<title>Free Fire Token Generator - Circle Edition</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
 <style>
   * { 
@@ -150,13 +150,13 @@
     transform: scale(0.97);
   }
 
-  /* Fixed Height Response Container (নড়াচড়া বন্ধের জন্য) */
+  /* Response Container */
   .response-container {
     margin-top: 18px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    height: 210px;
+    gap: 12px;
+    height: 230px;
     overflow-y: auto;
     padding: 4px;
   }
@@ -169,44 +169,53 @@
     border-radius: 10px;
   }
 
-  /* Circle Box Style */
+  /* Circle Item Box Style - No Pink Hover/Focus Glow */
   .item-box {
     background: rgba(13, 5, 29, 0.9);
-    border: 1px solid rgba(192, 38, 211, 0.3);
-    border-radius: 22px;
-    padding: 10px 16px;
+    border: 1.5px solid rgba(192, 38, 211, 0.3);
+    border-radius: 20px;
+    padding: 12px 18px;
     text-align: left;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
     user-select: none;
+    flex-shrink: 0;
+    outline: none;
+    -webkit-touch-callout: none;
   }
 
-  .item-box:hover {
-    border-color: #e879f9;
-    background: rgba(23, 9, 50, 0.95);
+  /* হোভার এবং ফোকাসে অতিরিক্ত পিংক লাইট পুরোপুরি অফ রাখা হয়েছে */
+  .item-box:hover, 
+  .item-box:focus, 
+  .item-box:active {
+    border-color: rgba(192, 38, 211, 0.3);
+    background: rgba(13, 5, 29, 0.9);
+    box-shadow: none;
+    outline: none;
   }
 
-  /* ক্লিক করলে আলো জ্বলে থাকার ইফেক্ট (Active Glow State) */
+  /* শুধুমাত্র ০.৫ সেকেন্ডের জন্য সবুজ গ্লো কাজ করবে */
   .item-box.active-glow {
     border-color: #00ffaa !important;
-    background: rgba(20, 45, 40, 0.9) !important;
-    box-shadow: 0 0 18px rgba(0, 255, 170, 0.4) !important;
+    background: rgba(12, 38, 30, 0.95) !important;
+    box-shadow: 0 0 20px rgba(0, 255, 170, 0.6) !important;
   }
 
   .item-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
   }
 
   .item-label {
     font-family: 'Orbitron', sans-serif;
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 800;
     color: #f0abfc;
     text-transform: uppercase;
     letter-spacing: 0.8px;
+    transition: color 0.3s ease;
   }
 
   .item-box.active-glow .item-label {
@@ -230,8 +239,15 @@
     word-break: break-all;
     white-space: pre-wrap;
     line-height: 1.35;
-    max-height: 60px;
+    max-height: 55px;
     overflow-y: auto;
+  }
+
+  .item-value::-webkit-scrollbar {
+    width: 2px;
+  }
+  .item-value::-webkit-scrollbar-thumb {
+    background: rgba(0, 255, 170, 0.3);
   }
 
   .placeholder-box {
@@ -324,12 +340,14 @@ async function generateToken() {
 
   try {
     const res = await fetch(url);
+    if (!res.ok) throw new Error("Network Response Fail");
     const data = await res.json();
     renderBoxes(data);
   } catch (error) {
+    console.warn("API Request Fail");
     renderBoxes({
       status: "error",
-      message: "API-এর সাথে সংযোগ করতে ব্যর্থ হয়েছে!",
+      message: "API Request Failed! Check Server URL or API Endpoint.",
       details: error.message
     });
   } finally {
@@ -373,10 +391,11 @@ function createBox(container, key, val) {
   box.className = 'item-box';
   
   box.onclick = function() {
-    // আগের সব লাইট বন্ধ করে শুধুমাত্র ক্লিক করা বক্সে লাইট জ্বালানোর জন্য
-    document.querySelectorAll('.item-box').forEach(b => b.classList.remove('active-glow'));
     box.classList.add('active-glow');
-    
+    setTimeout(() => {
+      box.classList.remove('active-glow');
+    }, 500);
+
     copyValue(val, key);
   };
 
@@ -414,7 +433,7 @@ function showToast(message) {
   toast.classList.add('show');
   setTimeout(() => {
     toast.classList.remove('show');
-  }, 2000);
+  }, 1800);
 }
 </script>
 
